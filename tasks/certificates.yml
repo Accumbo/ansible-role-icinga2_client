@@ -36,6 +36,7 @@
   command: |
     icinga2 node setup \
     --zone {{ inventory_hostname }} \
+    --cn {{ inventory_hostname }} \
     --endpoint {{ icinga2_client_monitoring_parents[0] }} \
     --parent_host {{ icinga2_client_monitoring_parents[0] }} \
     --parent_zone {{ icinga2_client_parent_zone }} \
