@@ -9,12 +9,17 @@
     - 'role::icinga2_client'
     - 'role::icinga2_client:config'
 
-- import_tasks: certificates.yml
+- import_tasks: installation.yml
   tags:
     - 'role::icinga2_client'
-    - 'role::icinga2_client:cert'
+    - 'role::icinga2_client:install'
 
 - import_tasks: configuration.yml
   tags:
     - 'role::icinga2_client'
     - 'role::icinga2_client:config'
+
+- import_tasks: certificates.yml
+  tags:
+    - 'role::icinga2_client'
+    - 'role::icinga2_client:cert'

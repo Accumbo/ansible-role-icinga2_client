@@ -11,8 +11,8 @@
   template:
     src: templates/etc/icinga2/icinga2.conf.j2
     dest: /etc/icinga2/icinga2.conf
-    owner: nagios
-    group: nagios
+    owner: '{{ icinga2_client_file_owner }}'
+    group: '{{ icinga2_client_file_group }}'
     mode: 0644
     seuser: system_u
     serole: object_r
@@ -24,8 +24,8 @@
   template:
     src: templates/etc/icinga2/constants.conf.j2
     dest: /etc/icinga2/constants.conf
-    owner: nagios
-    group: nagios
+    owner: '{{ icinga2_client_file_owner }}'
+    group: '{{ icinga2_client_file_group }}'
     mode: 0644
     seuser: system_u
     serole: object_r
@@ -37,11 +37,35 @@
   template:
     src: templates/etc/icinga2/zones.conf.j2
     dest: /etc/icinga2/zones.conf
-    owner: nagios
-    group: nagios
+    owner: '{{ icinga2_client_file_owner }}'
+    group: '{{ icinga2_client_file_group }}'
     mode: 0644
     seuser: system_u
     serole: object_r
     setype: etc_t
     selevel: s0
+  notify: "icinga2_client reload icinga2"
+
+- name: configure icinga2 api feature
+  template:
+    src: templates/etc/icinga2/features-available/api.conf.j2
+    dest: /etc/icinga2/features-available/api.conf
+    owner: '{{ icinga2_client_file_owner }}'
+    group: '{{ icinga2_client_file_group }}'
+    mode: 0640
+    seuser: system_u
+    serole: object_r
+    setype: etc_t
+    selevel: s0
+
+- name: enable icinga2 api feature
+  file:
+    src: /etc/icinga2/features-available/api.conf
+    dest: /etc/icinga2/features-enabled/api.conf
+    state: link
+
+- name: disable the notification feature
+  file:
+    name: /etc/icinga2/features-enabled/notification.conf
+    state: absent
   notify: "icinga2_client reload icinga2"
